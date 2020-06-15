@@ -1,0 +1,15 @@
+name: PixeliumCore
+version: ${project.version}
+main: pixelium.core.Core
+api-version: 1.15
+authors: [leoxshn]
+commands:
+  rules:
+    description: tells human the rules
+    usage: /<command>
+  biome:
+    description: sets biome
+    usage: /<command> <biome> <radius>
+  spawntraveller:
+    description: summons the traveller
+    usage: /<command>
