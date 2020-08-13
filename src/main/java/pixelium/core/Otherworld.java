@@ -21,16 +21,20 @@ public class Otherworld extends ChunkGenerator {
         for (int X = 0; X != 16; X++) for (int Z = 0; Z != 16; Z++) {
 
             double height1 = generator.noise((absX+X) / 8.0, (absZ+Z) / 8.0) + 1;
-            double height2 = generator.noise((absX+X+567) / 32.0, (absZ+Z+53) / 32.0) + 1;
-            double height3 = generator.noise((absX+X+12) / 128.0, (absZ+Z+34) / 128.0) + 1;
+            double height2 = generator.noise((absX+X+567) / 48.0, (absZ+Z+53) / 48.0) + 1;
+            double height3 = generator.noise((absX+X+12) / 256.0, (absZ+Z+34) / 256.0) + 1;
+            double height4 = generator.noise((absX+X+12) / 720.0, (absZ+Z+34) / 720.0) + 1;
             double mountanity = generator.noise((absX+X) / 1200.0, (absZ+Z) / 1200.0) + 1;
             double hottity = generator.noise((absX+X + 3456) / 1400.0, (absZ+Z+1346) / 1400.0) + 1;
             double plantgrowity = generator.noise((absX+X + 34) / 256.0, (absZ+Z+46) / 256.0) + 1;
 
+
+
             currentHeight = 20 + (int)(
-                    height1 * (1 + 2 * mountanity) +
-                    height2 * (5 + 48 * mountanity) +
-                    height3 * (72 - 32 * mountanity));
+                height1 * (1 + 3 * mountanity) +
+                height2 * (5 + 48 * mountanity) +
+                height3 * (-32 * mountanity) +
+                height4 * 60);
 
             int iscrystal = random.nextInt(1 + (int)Math.pow((generator.noise((absX+X) / 48.0, (absZ+Z) / 48.0) + 1) * 5, 2));
             double hottity30 = hottity * 15;
@@ -65,7 +69,7 @@ public class Otherworld extends ChunkGenerator {
                     else mat = Material.NETHERRACK;
                 } else if (hottity2 > 14) {
                     int chance = random.nextInt(3000);
-                    if (chance < 1400) mat = Material.SAND;
+                    if (chance < 1400) mat = Material.ANDESITE;
                     else if (chance < 2800) mat = Material.DEAD_BRAIN_CORAL_BLOCK;
                     else if (chance < 2802) mat = Material.GRAY_CONCRETE_POWDER;
                     else mat = Material.DEAD_HORN_CORAL_BLOCK;
@@ -77,11 +81,16 @@ public class Otherworld extends ChunkGenerator {
                     else if (chance < 2802) mat = Material.PRISMARINE_BRICKS;
                     else mat = Material.PURPLE_CONCRETE_POWDER;
                 }
-                chunk.setBlock(X, currentHeight - i, Z, mat);
+                int y = currentHeight - i;
+                double noise3D = generator.noise((absX+X) / 20.0, (y) / 20.0, (absZ+Z) / 20.0);
+                if (noise3D < 0.5) {
+                    chunk.setBlock(X, y, Z, mat);
+                }
             }
             for (int i = currentHeight-3; i > 5; i--) {
                 double shouldbecayvity = (generator.noise((absX+X) / 96.0, i / 96.0, (absZ+Z +34) / 96.0) + 1 +
                         generator.noise((absX+X) / 48.0, i / 48.0, (absZ+Z) / 48.0) + 1 +
+                        generator.noise((absX+X) / 7.0, i / 7.0, (absZ+Z) / 7.0) +
                         generator.noise((absX+X) / 16.0, i / 16.0, (absZ+Z) / 16.0) * mountanity / 2) * ((i - 5) / (double) (currentHeight - 3) / 4.0 + 0.75);
                 if (shouldbecayvity < 2.0) {
                     Material mat;
@@ -105,9 +114,9 @@ public class Otherworld extends ChunkGenerator {
                 } else {
                     double shouldbeweirdthingity = (generator.noise((absX+X + 356) / 24.0, i / 24.0, (absZ+Z +34) / 24.0) + 1 +
                             generator.noise((absX+X + 34) / 4.0, i / 4.0, (absZ+Z +3456) / 4.0) + 1) * ((i - 5) / (double) (currentHeight - 3) / 4 + 0.75);
-                    if (shouldbeweirdthingity > 4.2) chunk.setBlock(X, i, Z, Material.GLOWSTONE);
-                    else if (shouldbeweirdthingity > 3.5) chunk.setBlock(X, i, Z, Material.HONEY_BLOCK);
-                    else if (shouldbeweirdthingity > 2.4) chunk.setBlock(X, i, Z, Material.YELLOW_STAINED_GLASS);
+                    if (shouldbeweirdthingity > 2.7) chunk.setBlock(X, i, Z, Material.GLOWSTONE);
+                    else if (shouldbeweirdthingity > 2.5) chunk.setBlock(X, i, Z, Material.HONEY_BLOCK);
+                    else if (shouldbeweirdthingity > 2.2) chunk.setBlock(X, i, Z, Material.YELLOW_STAINED_GLASS);
                     else {
                         double shouldbeweirdthingity2 = (generator.noise((absX+X + 3456) / 5.6, i / 5.6, (absZ+Z + 54) / 5.6) + 1) * (1 - (i - 5) / (double) (currentHeight - 3) / 2) * plantgrowity;
                         if (shouldbeweirdthingity2 > 1.2) chunk.setBlock(X, i, Z, Material.NETHER_WART_BLOCK);
